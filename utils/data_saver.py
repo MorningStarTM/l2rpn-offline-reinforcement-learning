@@ -23,9 +23,3 @@ class TrajectoryDataLoader(DataLoader):
         dataset = TrajectoryDataset(filename)
         super().__init__(dataset, batch_size=batch_size, shuffle=shuffle)
 
-# Example usage:
-filename = 'trajectory.pickle'
-batch_size = 32
-shuffle = True
-
-trajectory_loader = TrajectoryDataLoader(filename, batch_size=batch_size, shuffle=shuffle)
