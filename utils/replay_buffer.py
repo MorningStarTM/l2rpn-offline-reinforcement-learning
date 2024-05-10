@@ -3,6 +3,7 @@ import numpy as np
 import os
 import random
 from collections import namedtuple, deque
+import pickle
 
 
 class ReplayBuffer:
@@ -82,3 +83,16 @@ class GraphReplayBuffer:
         dones   = self.dones[batch_indices]
 
         return states, adj, actions, rewards, states_, adj_, dones
+    
+
+    def save_trajectory(self, filename):
+        trajectory = {
+            'states': self.states[:self.mem_count],
+            'actions': self.actions[:self.mem_count],
+            'rewards': self.rewards[:self.mem_count],
+            'next_states': self.states_[:self.mem_count],
+            'dones': self.dones[:self.mem_count]
+        }
+
+        with open(filename, 'wb') as f:
+            pickle.dump(trajectory, f)
