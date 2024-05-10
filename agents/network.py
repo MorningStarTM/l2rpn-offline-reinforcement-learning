@@ -4,11 +4,11 @@ import torch.nn.functional as F
 import torch_geometric.nn as gnn
 
 class QNetwork(nn.Module):
-    def __init__(self, observation_dim, action_dim, cfg):
+    def __init__(self, cfg):
         super(QNetwork, self).__init__()
 
-        self.observation_dim = observation_dim
-        self.action_dim = action_dim
+        self.observation_dim = cfg['observation_dim']
+        self.action_dim = cfg['action_dim']
         self.fc1_dim = cfg['FC1']
         self.fc2_dim = cfg['FC2']
         self.fc1 = nn.Linear(self.observation_dim, self.fc1_dim)
