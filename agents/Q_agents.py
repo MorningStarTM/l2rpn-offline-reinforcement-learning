@@ -16,22 +16,25 @@ class SimpleDQN:
     def __init__(self, cfg, env):
         self.cfg = cfg
         self.memory = ReplayBuffer(self.cfg['MEM_SIZE'], self.cfg['BATCH_SIZE'])
+        self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         self.cfg = cfg
         self.env = env
+        self.converter = Converter(self.env)
         self.exploration_rate = self.cfg['EXPLORATION_MAX']
-        self.network = QNetwork(self.cfg)
+        self.network = QNetwork(self.cfg).to(self.device)
         self.losses = []
-        self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+        
 
     def choose_action(self, observation):
         if random.random() < self.exploration_rate:
-            return self.env.action_space.sample()
+            return self.converter.convert_env_act_to_one_hot_encoding_act(self.env.action_space.sample().to_vect())
         
         state = torch.tensor(observation).float().detach()
         state = state.to(self.device)
         state = state.unsqueeze(0)
         q_values = self.network(state)
-        return torch.argmax(q_values).item()
+        #return torch.argmax(q_values).item()
+        return q_values.cpu().detach().numpy()
     
     def learn(self):
         if self.memory.mem_count < self.cfg['BATCH_SIZE']:
@@ -92,6 +95,7 @@ class SimpleGraphDQN:
             return self.converter.convert_env_act_to_one_hot_encoding_act(self.env.action_space.sample().to_vect())
         
         
+
         q_values = self.network(observation, adj)
         return torch.argmax(q_values).item()
     
@@ -157,7 +161,7 @@ class OfflineQAgent:
         return torch.argmax(q_val).item()
     
 
-    def learn(self, states, actions, rewards, dones):
+    def learn(self, states, actions, rewards, states_, dones):
         states = torch.tensor(states , dtype=torch.float32).to(self.device)
         actions = torch.tensor(actions, dtype=torch.long).to(self.device)
         rewards = torch.tensor(rewards, dtype=torch.float32).to(self.device)
