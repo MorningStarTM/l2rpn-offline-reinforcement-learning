@@ -11,10 +11,13 @@ class QNetwork(nn.Module):
         self.action_dim = cfg['action_dim']
         self.fc1_dim = cfg['FC1']
         self.fc2_dim = cfg['FC2']
+        self.lr = cfg['lr']
         self.fc1 = nn.Linear(self.observation_dim, self.fc1_dim)
         self.fc2 = nn.Linear(self.fc1_dim, self.fc1_dim)
         self.fc3 = nn.Linear(self.fc1_dim, self.fc2_dim)
         self.fc4 = nn.Linear(self.fc2_dim, self.action_dim)
+        self.optimizer = torch.optim.Adam(self.parameters(), lr=self.lr)
+        self.loss = nn.MSELoss()
 
     def forward(self, state):
         x = F.relu(self.fc1(state))
