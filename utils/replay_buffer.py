@@ -41,6 +41,24 @@ class ReplayBuffer:
 
         return states, actions, rewards, states_, dones
     
+    def __len__(self):
+        return self.mem_count
+    
+
+    def save_trajectory(self):
+        filename = "Data"
+        os.makedirs(filename, exist_ok=True)
+        trajectory = {
+            'states': self.states[:self.mem_count],
+            'actions': self.actions[:self.mem_count],
+            'rewards': self.rewards[:self.mem_count],
+            'next_states': self.states_[:self.mem_count],
+            'dones': self.dones[:self.mem_count]
+        }
+
+        with open(os.path.join(filename, "trajectory.pkl"), 'wb') as f:
+            pickle.dump(trajectory, f)
+    
 
 
 class GraphReplayBuffer:

@@ -44,8 +44,9 @@ class Trainer:
 
             while True:
                 action = agent.choose_action(state.to_vect())
-                new_state, reward, done, _ = self.env.step(self.converter.convert_one_hot_encoding_act_to_env_act(action))
-                agent.memory.add(state.to_vect(), np.argmax(action), reward, new_state.to_vect(), done)
+                new_state, reward, done, _ = self.env.step(self.converter.convert_one_hot_encoding_act_to_env_act(self.converter.int_one_hot(action)))
+                print(action)
+                agent.memory.add(state.to_vect(), action, reward, new_state.to_vect(), done)
                 agent.learn()
                 state = new_state
                 score += reward
