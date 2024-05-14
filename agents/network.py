@@ -5,7 +5,7 @@ import torch_geometric.nn as gnn
 
 class QNetwork(nn.Module):
     def __init__(self, cfg):
-        super(QNetwork, self).__init__()
+        super().__init__()
 
         self.observation_dim = cfg['observation_dim']
         self.action_dim = cfg['action_dim']
