@@ -1,0 +1,17 @@
+MEM_SIZE: 10000
+BATCH_SIZE : 32
+EXPLORATION_MAX : 1.0
+observation_dim : 182
+action_dim : 132
+GAMMA : 0.9
+node_feature : 3
+EPSILON_RATE : 1.0
+EXPLORATION_DECAY : 0.999
+EXPLORATION_MIN : 0.001
+
+FC1 : 512
+FC2 : 256
+EVAL_EPISODES: 10
+lr: 0.0003
+LR: 0.00001
+cql_alpha: 
